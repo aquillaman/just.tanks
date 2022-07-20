@@ -13,7 +13,7 @@ namespace Editor
             {
                 EditorSceneManager.sceneOpened -= EditorSceneManagerOnsceneOpened;
                 EditorSceneManager.sceneOpened += EditorSceneManagerOnsceneOpened;
-                EditorSceneManager.OpenScene("Assets/Scenes/Core.unity", OpenSceneMode.Single);
+                EditorSceneManager.OpenScene("Assets/Scenes/main.unity", OpenSceneMode.Single);
             }
         }
 
