@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04f0717f04fe4ecba31a9f1b90ddc0b0, type: 3}
+  m_Name: PlayerTank
+  m_EditorClassIdentifier: Assembly-CSharp::TankSettings
+  Prefab: {fileID: 4722360028683741262, guid: 2a2b9677848926644a1b90fec8d5e9fd, type: 3}
+  Weapons:
+  - {fileID: 11400000, guid: 70431608bd96efe47ad69a46c40d961b, type: 2}
+  - {fileID: 11400000, guid: c1d9d111ac5001c489d407de2c08f53e, type: 2}
+  Helth: 300
+  AimRadius: 10
+  FireRadius: 9
+  CollisionDamage: 2
+  Velocity: 0.5
+  AngularVelocity: 0.5
