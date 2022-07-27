@@ -5,11 +5,13 @@ namespace Behaviours
 {
     public abstract class MoveBehaviour : Behaviour
     {
-        private Vector2 _input;
         private readonly Rigidbody _rigidbody;
+        protected readonly Tank Owner;
+        private Vector2 _input;
 
-        protected MoveBehaviour(Tank owner, Rigidbody rigidbody) : base(owner)
+        protected MoveBehaviour(Tank owner, Rigidbody rigidbody)
         {
+            Owner = owner;
             _rigidbody = rigidbody;
         }
 

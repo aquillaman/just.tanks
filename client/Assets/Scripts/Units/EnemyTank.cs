@@ -31,7 +31,7 @@ namespace Units
         {
             AddBehaviour(new PatrolBehaviour(this, _path, _agent, _rigidbody));
             AddBehaviour(new ChaseBehaviour(this, _agent, _rigidbody));
-            AddBehaviour(new FindTargetBehaviour(new TargetProvider(this, LayerMask)));
+            AddBehaviour(new FindTargetBehaviour(this, new TargetProvider(this, LayerMask)));
             AddBehaviour(new AimBehaviour(this));
             AddBehaviour(new AttackBehaviour(this));
         }

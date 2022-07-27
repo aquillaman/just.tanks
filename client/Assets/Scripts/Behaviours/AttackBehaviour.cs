@@ -5,15 +5,19 @@ namespace Behaviours
 {
     public class AttackBehaviour : Behaviour
     {
-        public AttackBehaviour(Tank owner) : base(owner) { }
+        private readonly Tank _owner;
+        public AttackBehaviour(Tank owner)
+        {
+            _owner = owner;
+        }
 
         public override void Update()
         {
-            if (Owner.Target != null)
+            if (_owner.Target != null)
             {
-                if (Vector3.Distance(Owner.Transform.position, Owner.Target.Transform.position) <= Owner.FireRadius)
+                if (Vector3.Distance(_owner.Transform.position, _owner.Target.Transform.position) <= _owner.FireRadius)
                 {
-                    Owner.CurrentWeapon?.Shoot();
+                    _owner.CurrentWeapon?.Shoot();
                 }
             }
         }

@@ -22,7 +22,7 @@ namespace Units
 
         public void Initialize()
         {
-            AddBehaviour(new FindTargetBehaviour(new TargetProvider(this, LayerMask)));
+            AddBehaviour(new FindTargetBehaviour(this, new TargetProvider(this, LayerMask)));
             AddBehaviour(new AimBehaviour(this));
             AddBehaviour(new AttackBehaviour(this));
         }

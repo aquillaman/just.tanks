@@ -5,13 +5,17 @@ namespace Behaviours
 {
     public class AimBehaviour : Behaviour
     {
-        public AimBehaviour(Tank owner) : base(owner) { }
+        private readonly Tank _owner;
+        public AimBehaviour(Tank owner)
+        {
+            _owner = owner;
+        }
 
         public override void Update()
         {
-            var target = Owner.Target;
-            var turret = Owner.Turret;
-            var direction = Owner.transform.forward;
+            var target = _owner.Target;
+            var turret = _owner.Turret;
+            var direction = _owner.transform.forward;
             if (target != null)
             {
                 direction = turret.position.DirectionTo(target.Transform.position);

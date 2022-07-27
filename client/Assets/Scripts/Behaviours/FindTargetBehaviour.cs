@@ -4,20 +4,21 @@ namespace Behaviours
 {
     public class FindTargetBehaviour : Behaviour
     {
+        private readonly Tank _owner;
         private readonly TargetProvider _targetProvider;
 
-        public FindTargetBehaviour(TargetProvider targetProvider) : base(null)
+        public FindTargetBehaviour(Tank owner, TargetProvider targetProvider)
         {
+            _owner = owner;
             _targetProvider = targetProvider;
-            throw new System.NotImplementedException();
         }
 
         public override void Update()
         {
             _targetProvider.TryGetTarget(out var target);
-            Owner.Target = target;
+            _owner.Target = target;
         }
-    
+
         public override void FixedUpdate()
         {
             // no op
