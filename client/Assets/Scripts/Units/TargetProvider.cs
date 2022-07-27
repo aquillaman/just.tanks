@@ -1,32 +1,41 @@
-﻿using UnityEngine;
+﻿using Helpers;
+using UnityEngine;
 
 namespace Units
 {
-    public class TargetProvider
+    public class TargetProvider : ITargetProvider
     {
-        private static readonly Collider[] Colliders = new Collider[15];
+        private readonly LayerMask _mask;
+        private readonly ITargetProviderPrefs _prefs;
 
-        public static bool GetTarget(Vector3 position, float radius, LayerMask mask, out ITarget result)
+        public TargetProvider(ITargetProviderPrefs prefs, LayerMask mask)
         {
-            var count = Physics.OverlapSphereNonAlloc(position, radius, Colliders, mask);
+            _mask = mask;
+            _prefs = prefs;
+        }
+
+        public bool TryGetTarget(out ITarget result)
+        {
+            var colliders = NonAllocHelper.Colliders;
+            var count = Physics.OverlapSphereNonAlloc(_prefs.Position, _prefs.Radius, colliders, _mask);
             if (count > 0)
             {
                 var minDist = float.MaxValue;
                 ITarget closest = null;
                 for (var i = 0; i < count; i++)
                 {
-                    var target = Colliders[i].GetComponentInParent<ITarget>();
+                    var target = colliders[i].GetComponentInParent<ITarget>();
 
-                    if (target == null) { continue; }
+                    if (target == null) continue;
 
-                    var dist = Vector3.Distance(position, target.Transform.position);
+                    var dist = Vector3.Distance(_prefs.Position, target.Transform.position);
                     if (dist < minDist)
                     {
                         minDist = dist;
                         closest = target;
                     }
                 }
-                
+
                 result = closest;
                 return result != null;
             }

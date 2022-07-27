@@ -4,10 +4,12 @@ using UnityEngine;
 
 namespace Units
 {
-    public class PlayerTank : Tank, IAgent
+    public class PlayerTank : Tank, IAgent, ITargetProviderPrefs
     {
         private Transform _transform;
         private PlayerMovementController _movementController;
+        public float Radius => AimRadius;
+        public Vector3 Position => Transform.position;
         public override Transform Transform => _transform;
         public override int LayerMask => Layers.Enemy;
 
@@ -20,7 +22,7 @@ namespace Units
 
         public void Initialize()
         {
-            AddBehaviour(new FindTargetBehaviour(this));
+            AddBehaviour(new FindTargetBehaviour(new TargetProvider(this, LayerMask)));
             AddBehaviour(new AimBehaviour(this));
             AddBehaviour(new AttackBehaviour(this));
         }

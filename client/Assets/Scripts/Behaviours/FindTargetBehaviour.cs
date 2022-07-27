@@ -4,11 +4,17 @@ namespace Behaviours
 {
     public class FindTargetBehaviour : Behaviour
     {
-        public FindTargetBehaviour(Tank owner) : base(owner) { }
-    
+        private readonly TargetProvider _targetProvider;
+
+        public FindTargetBehaviour(TargetProvider targetProvider) : base(null)
+        {
+            _targetProvider = targetProvider;
+            throw new System.NotImplementedException();
+        }
+
         public override void Update()
         {
-            TargetProvider.GetTarget(Owner.Transform.position, Owner.AimRadius, Owner.LayerMask, out var target);
+            _targetProvider.TryGetTarget(out var target);
             Owner.Target = target;
         }
     
