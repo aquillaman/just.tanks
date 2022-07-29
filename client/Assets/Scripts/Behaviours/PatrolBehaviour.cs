@@ -10,7 +10,7 @@ namespace Behaviours
         private int _index = 0;
         private readonly Vector3[] _path;
         private Vector3 _destination;
-        private NavMeshAgent _agent;
+        private readonly NavMeshAgent _agent;
 
         internal PatrolBehaviour(Tank owner, Vector3[] path, NavMeshAgent agent, Rigidbody rigidbody) : base(owner,
             rigidbody)
@@ -26,9 +26,7 @@ namespace Behaviours
         {
         }
 
-
         private Vector3 _corner;
-        private Queue<Vector3> _corners = new Queue<Vector3>();
         private Rigidbody _rigidbody;
 
         public override void FixedUpdate()
@@ -37,7 +35,9 @@ namespace Behaviours
 
             UpdateWayPoint();
 
-            Move(new Vector3(_agent.nextPosition.x, 0, _agent.nextPosition.z));
+            var velocity = _agent.velocity;
+            Move(new Vector3(velocity.x, 0, velocity.z).normalized);
+            _agent.nextPosition = _rigidbody.position;
         }
 
         private void UpdateWayPoint()

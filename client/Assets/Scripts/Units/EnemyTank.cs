@@ -23,6 +23,7 @@ namespace Units
             _agent = GetComponent<NavMeshAgent>();
             _transform = GetComponent<Transform>();
             _rigidbody = GetComponent<Rigidbody>();
+            _agent.updateUpAxis = false;
             _agent.updatePosition = false;
             _agent.updateRotation = false;
         }

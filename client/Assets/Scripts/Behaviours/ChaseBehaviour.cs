@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Units;
+﻿using Units;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,18 +6,16 @@ namespace Behaviours
 {
     public class ChaseBehaviour : MoveBehaviour
     {
-        private int _index = 0;
-        private Vector3 _corner;
-        private Vector3 _destination;
         private Vector3 _lastPosition;
         private readonly NavMeshAgent _agent;
-        private readonly Queue<Vector3> _corners = new Queue<Vector3>();
+        private readonly Rigidbody _rigidbody;
 
         private ITarget Target => Owner.Target;
 
         internal ChaseBehaviour(Tank owner, NavMeshAgent agent, Rigidbody rigidbody) : base(owner, rigidbody)
         {
             _agent = agent;
+            _rigidbody = rigidbody;
         }
 
         public override void Update()
@@ -31,31 +28,26 @@ namespace Behaviours
 
             UpdateWayPoint();
 
-            if (_agent.remainingDistance > 1.4f)
-            {
-                Move(new Vector3(_agent.nextPosition.x, 0, _agent.nextPosition.z));
-            }
-            else
-            {
-                _agent.nextPosition = Owner.transform.position;
-            }
+            var velocity = _agent.velocity;
+            Move(new Vector3(velocity.x, 0, velocity.z).normalized);
+            _agent.nextPosition = _rigidbody.position;
         }
 
         private void UpdateWayPoint()
         {
-            if (_agent.remainingDistance > 1.6f) return;
+            var position = Target.Transform.position;
 
-            SelectNextPatrolPoint();
+            if (_agent.pathEndPosition == position && _agent.remainingDistance > 1.6f) return;
+
+            SelectNextPatrolPoint(position);
         }
 
-        private void SelectNextPatrolPoint()
+        private void SelectNextPatrolPoint(Vector3 position)
         {
-            if (!_lastPosition.Equals(Target.Transform.position))
+            if (!_lastPosition.Equals(position))
             {
-                _lastPosition = Target.Transform.position;
-                _agent.SetDestination(_lastPosition);
+                _agent.SetDestination(_lastPosition = position);
             }
         }
-    
     }
 }

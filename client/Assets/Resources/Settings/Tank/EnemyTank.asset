@@ -16,7 +16,7 @@ MonoBehaviour:
   Weapons:
   - {fileID: 11400000, guid: 70431608bd96efe47ad69a46c40d961b, type: 2}
   Helth: 25
-  AimRadius: 8
+  AimRadius: 10
   FireRadius: 8
   CollisionDamage: 2
   Velocity: 0.3

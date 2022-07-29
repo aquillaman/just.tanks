@@ -7,7 +7,6 @@ namespace Behaviours
     {
         private readonly Rigidbody _rigidbody;
         protected readonly Tank Owner;
-        private Vector2 _input;
 
         protected MoveBehaviour(Tank owner, Rigidbody rigidbody)
         {
@@ -15,14 +14,13 @@ namespace Behaviours
             _rigidbody = rigidbody;
         }
 
-        protected void Move(Vector3 position)
+        protected void Move(Vector3 input)
         {
-            var rbPosition = _rigidbody.position;
-            var direction = new Vector3(rbPosition.x, 0, rbPosition.z).DirectionTo(position);
-            var rotation = Quaternion.LookRotation(direction);
-            _rigidbody.position = position;
-            _rigidbody.rotation = rotation;
-            _rigidbody.transform.rotation = rotation;
+            if (input == Vector3.zero) return;
+            
+            var force = (Vector3.forward * input.z) + (Vector3.right * input.x);
+            _rigidbody.AddForce(force * 5 - _rigidbody.velocity, ForceMode.VelocityChange);
+            _rigidbody.rotation = Quaternion.Slerp(_rigidbody.rotation, Quaternion.LookRotation(force), Time.fixedDeltaTime * 10);
         }
     }
 }
