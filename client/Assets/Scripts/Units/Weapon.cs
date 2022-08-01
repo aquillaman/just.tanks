@@ -44,8 +44,8 @@ namespace Units
         {
             switch (type)
             {
-                case ProjectileType.RoundShot: return Pools.RoundShot.Take();
-                case ProjectileType.CanisterShot: return Pools.CanisterShot.Take();
+                case ProjectileType.RoundShot: return Pools.RoundShot.Get();
+                case ProjectileType.CanisterShot: return Pools.CanisterShot.Get();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

@@ -7,56 +7,58 @@ using Behaviour = Behaviours.Behaviour;
 
 namespace Units
 {
-    public class Tank : MonoBehaviour, ITarget, IPoolItem
+    public class Tank : MonoBehaviour, ITarget, IPoolable
     {
         public int HP = 17;
-        protected Rigidbody _rigidbody;
+        protected Rigidbody Rigidbody;
         [SerializeField]
         private Transform _launchPoint;
         public Transform Turret;
 
         public int AimRadius => _settings.AimRadius;
         public int FireRadius  => _settings.FireRadius;
-        public int CollisionDamage  => _settings.CollisionDamage;
+        private int CollisionDamage  => _settings.CollisionDamage;
 
         public ITarget Target;
     
-        public virtual int LayerMask { get; }
         public event Action<Tank> Destroyed;
-        public virtual Transform Transform { get; }
-    
-        private readonly List<Weapon> _weapons = new List<Weapon>();
-        public Weapon CurrentWeapon;
-        private int _weaponIndex = -1;
-        private TankSettings _settings;
-        protected bool _isDestroyed;
+        public event Action<IPoolable> ReturnToPool;
 
-        private readonly List<Behaviour> Behaviours = new List<Behaviour>();
+        private readonly List<Weapon> _weapons = new List<Weapon>();
+        private int _weaponIndex = -1;
+        private bool _isDestroyed;
+        public Weapon CurrentWeapon;
+        private TankSettings _settings;
+
+        public Transform Transform { get; private set; }
+        private readonly List<Behaviour> _behaviours = new List<Behaviour>();
+
+        protected virtual void Awake()
+        {
+            Transform = GetComponent<Transform>();
+            Rigidbody = GetComponent<Rigidbody>();
+
+            Rigidbody.Sleep();
+        }
 
         protected void AddBehaviour(Behaviour behaviour)
         {
-            Behaviours.Add(behaviour);
+            _behaviours.Add(behaviour);
         }
-        
-        protected void ClearBehaviours()
+
+        private void ClearBehaviours()
         {
-            Behaviours.Clear();
+            _behaviours.Clear();
         }
 
         private void Update()
         {
-            for (int i = 0; i < Behaviours.Count; i++)
-            {
-                Behaviours[i].Update();
-            }
+            foreach (var behaviour in _behaviours) { behaviour.Update(); }
         }
     
         private void FixedUpdate()
         {
-            for (int i = 0; i < Behaviours.Count; i++)
-            {
-                Behaviours[i].FixedUpdate();
-            }
+            foreach (var behaviour in _behaviours) { behaviour.FixedUpdate(); }
         }
     
         protected void ChangeWeapon()
@@ -88,7 +90,7 @@ namespace Units
             {
                 _isDestroyed = true;
                 Destroyed?.Invoke(this);
-                Reset();
+                ReturnToPool?.Invoke(this);
             }
         }
 
@@ -96,8 +98,7 @@ namespace Units
         {
             if (collision.rigidbody)
             {
-                Debug.Log($"AddForce impulse:{collision.impulse}");
-                _rigidbody.AddForce(-collision.impulse, ForceMode.Impulse);
+                Rigidbody.AddForce(-collision.impulse, ForceMode.Impulse);
                 
                 var target = collision.gameObject.GetComponentInParent<ITarget>();
                 target?.TakeDamage(CollisionDamage);
@@ -110,16 +111,17 @@ namespace Units
 
             HP = settings.Helth;
             SetWeapons(settings.Weapons);
-        }
+        }   
 
-        public virtual void Setup()
+        void IPoolable.Setup()
         {
             HP = _settings.Helth;
             _isDestroyed = false;
         }
 
-        public virtual void Reset()
+        void IPoolable.Reset()
         {
+            Rigidbody.Sleep();
             ClearBehaviours();
         }
     }

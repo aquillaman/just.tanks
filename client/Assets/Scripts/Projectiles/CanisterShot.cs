@@ -1,14 +1,4 @@
-﻿using Pooling;
-
-namespace Projectiles
+﻿namespace Projectiles
 {
-    public class CanisterShot : Projectile
-    {
-
-        public override void Reset()
-        {
-            base.Reset();
-            Pools.CanisterShot.Put(this);
-        }
-    }
+    public class CanisterShot : Projectile { }
 }

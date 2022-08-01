@@ -10,19 +10,16 @@ namespace Units
         private PlayerMovementController _movementController;
         public float Radius => AimRadius;
         public Vector3 Position => Transform.position;
-        public override Transform Transform => _transform;
-        public override int LayerMask => Layers.Enemy;
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
-            _transform = GetComponent<Transform>();
+            base.Awake();
             _movementController = GetComponent<PlayerMovementController>();
         }
 
         public void Initialize()
         {
-            AddBehaviour(new FindTargetBehaviour(this, new TargetProvider(this, LayerMask)));
+            AddBehaviour(new FindTargetBehaviour(this, new TargetProvider(this, Layers.Enemy)));
             AddBehaviour(new AimBehaviour(this));
             AddBehaviour(new AttackBehaviour(this));
         }
@@ -35,11 +32,6 @@ namespace Units
         void IAgent.ChangeWeapon()
         {
             ChangeWeapon();
-        }
-        
-        public override void Reset()
-        {
-            Destroy(gameObject);
         }
     }
 }

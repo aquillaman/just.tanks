@@ -2,7 +2,6 @@
 using Pooling;
 using Units;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -13,7 +12,7 @@ public class GameManager : MonoSingleton<GameManager>
         StartGame();
     }
 
-    public void StartGame()
+    private void StartGame()
     {
         var tank = CreateAndSetupPlayerTank();
         CreateCameraController(tank.Transform);

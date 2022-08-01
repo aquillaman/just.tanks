@@ -14,15 +14,12 @@ namespace Units
 
         public float Radius => AimRadius;
         public Vector3 Position => Transform.position;
-        public override Transform Transform => _transform;
-        public override int LayerMask => Layers.Player;
-
 
         private void Awake()
         {
+            base.Awake();
+
             _agent = GetComponent<NavMeshAgent>();
-            _transform = GetComponent<Transform>();
-            _rigidbody = GetComponent<Rigidbody>();
             _agent.updateUpAxis = false;
             _agent.updatePosition = false;
             _agent.updateRotation = false;
@@ -30,9 +27,9 @@ namespace Units
 
         public void Initialize()
         {
-            AddBehaviour(new PatrolBehaviour(this, _path, _agent, _rigidbody));
-            AddBehaviour(new ChaseBehaviour(this, _agent, _rigidbody));
-            AddBehaviour(new FindTargetBehaviour(this, new TargetProvider(this, LayerMask)));
+            AddBehaviour(new PatrolBehaviour(this, _path, _agent, Rigidbody));
+            AddBehaviour(new ChaseBehaviour(this, _agent, Rigidbody));
+            AddBehaviour(new FindTargetBehaviour(this, new TargetProvider(this, Layers.Player)));
             AddBehaviour(new AimBehaviour(this));
             AddBehaviour(new AttackBehaviour(this));
         }
@@ -40,12 +37,6 @@ namespace Units
         public void SetPatrolPath(Vector3[] path)
         {
             _path = path;
-        }
-
-        public override void Reset()
-        {
-            base.Reset();
-            Pools.EnemyTank.Put(this);
         }
     }
 }

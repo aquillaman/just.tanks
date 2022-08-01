@@ -50,7 +50,7 @@ namespace Units
             }
         
             var index = Enemies.Count % SpawnPoints.Length;
-            var enemy = Pools.EnemyTank.Take();
+            var enemy = Pools.EnemyTank.Get();
             enemy.transform.position = SpawnPoints[index].position;
             enemy.Destroyed += EnemyOnDestroy;
             Enemies.Add(enemy);

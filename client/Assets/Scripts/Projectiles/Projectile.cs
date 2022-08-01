@@ -1,14 +1,16 @@
-﻿using Pooling;
+﻿using System;
+using Pooling;
 using Units;
 using UnityEngine;
 
 namespace Projectiles
 {
-    public class Projectile : MonoBehaviour, IPoolItem
+    public class Projectile : MonoBehaviour, IPoolable
     {
         public Rigidbody Rigidbody => _rigidbody;
         private Rigidbody _rigidbody;
         private int _damage;
+        public event Action<IPoolable> ReturnToPool;
 
         private void Awake()
         {
@@ -25,7 +27,7 @@ namespace Projectiles
         private void OnTriggerEnter(Collider other)
         {
             other.gameObject.GetComponentInParent<ITarget>()?.TakeDamage(_damage);
-            Reset();
+            ReturnToPool?.Invoke(this);
         }
 
         public void Setup()
